@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../constants.js";
+import Account from "../models/account.model.js";
 export const signup = async (req, res) => {
   const validation = signupSchema.safeParse(req.body);
   if (!validation.success) {
@@ -23,8 +24,13 @@ export const signup = async (req, res) => {
       firstname: firstname,
       lastname: lastname,
     });
+    const userId = newUser._id;
+    await Account.create({
+      userId,
+      balance: 1 + Math.random() * 10000,
+    });
     await newUser.save();
-    const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
     return res
       .status(200)
       .json({ success: true, message: "User registered successfully", token });
