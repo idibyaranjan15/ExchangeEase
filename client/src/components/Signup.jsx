@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router";
+import { toast } from "react-hot-toast";
 const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,8 +21,10 @@ const Signup = () => {
         }
       );
       console.log(response.data);
+      toast.success(response.data.message);
     } catch (error) {
       console.log(`Error fetching data`, error);
+      toast.error(error.message);
     }
   };
   return (

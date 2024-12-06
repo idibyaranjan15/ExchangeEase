@@ -1,11 +1,27 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router";
+import { toast } from "react-hot-toast";
 
 const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = () => {};
+  const handleSignIn = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8006/api/user/signin",
+        {
+          username,
+          password,
+        }
+      );
+      console.log(response.data);
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log(`Error in signin`, error);
+    }
+  };
 
   return (
     <div className="h-screen flex items-center justify-center bg-white text-black">
@@ -34,12 +50,14 @@ const Signin = () => {
           </div>
         </div>
         <div className="mt-6">
-          <button
-            onClick={handleSignIn}
-            className="w-full px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
-          >
-            Sign In
-          </button>
+          <Link to="/dashboard">
+            <button
+              onClick={handleSignIn}
+              className="w-full px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
+            >
+              Sign In
+            </button>
+          </Link>
         </div>
         <Link to="/">
           <div className="mt-4 text-center text-sm text-gray-600">
